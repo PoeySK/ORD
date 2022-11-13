@@ -70,7 +70,7 @@ const App = () => {
     },
 
     {
-      id: "검병",
+      id: "칼병",
       count: 0,
     },
     {
@@ -116,7 +116,7 @@ const App = () => {
     {
       id: "타시기",
       count: 0,
-      need: [{ 검병: 1 }, { 총병: 1 }],
+      need: [{ 칼병: 1 }, { 총병: 1 }],
     },
     {
       id: "페로나",
@@ -136,7 +136,7 @@ const App = () => {
     {
       id: "후쿠로",
       count: 0,
-      need: [{ 검병: 2 }],
+      need: [{ 칼병: 2 }],
     },
   ]);
 
@@ -157,12 +157,42 @@ const App = () => {
   const onClickButtonMake = (e) => {
     let newUnits = units.map((unit) => {
       if (unit.id === e.target.id) {
-        let needUnits = unit.need.map((u) => {
-          console.log(u);
+        console.log(unit.need);
+        let result = false;
+        let trueCounting = 0;
+        for (let i = 0; i < unit.need.length; i++) {
+          const mapping = Object.entries(unit.need[i]).map((m) => {
+            const find = units.map((tg) => {
+              if (tg.id === m[0] && tg.count >= m[1]) {
+                return trueCounting++;
+              } else {
+                return trueCounting;
+              }
+            });
+            console.log("find: " + find);
+            return trueCounting;
+          });
+          console.log("mapping: " + typeof parseInt(mapping));
+          console.log("need length: " + typeof unit.need.length);
+          if (parseInt(mapping) === unit.need.length) {
+            console.log("hi");
+            result = true;
+            break;
+          }
+        }
+        console.log("result 값: " + result);
+        if (result) {
+          // 조합 가능
+          console.log("조합 가능");
           return {
-            ...u,
+            ...unit,
+            count: unit.count + 1,
           };
-        });
+        } else {
+          // 조합 불가능
+          console.log("조합 불가능");
+          return unit;
+        }
       } else {
         return unit;
       }
@@ -196,7 +226,7 @@ const App = () => {
             <th>원랜디 조합법</th>
           </thead>
           <tbody>
-            <th>흔함</th>
+            <th>안흔함</th>
             {commonUnits.map((name, index) => {
               return (
                 <tr>
@@ -236,7 +266,11 @@ const App = () => {
                     >
                       +
                     </button>
-                    <button className="make" onClick={onClickButtonMake}>
+                    <button
+                      id={name}
+                      className="make"
+                      onClick={onClickButtonMake}
+                    >
                       M
                     </button>
                   </td>
