@@ -155,6 +155,7 @@ const App = () => {
   };
 
   const onClickButtonMake = (e) => {
+    let insufficientUnit = "";
     let newUnits = units.map((unit) => {
       if (unit.id === e.target.id) {
         console.log(unit.need);
@@ -163,8 +164,12 @@ const App = () => {
         for (let i = 0; i < unit.need.length; i++) {
           const mapping = Object.entries(unit.need[i]).map((m) => {
             const find = units.map((tg) => {
-              if (tg.id === m[0] && tg.count >= m[1]) {
-                return trueCounting++;
+              if (tg.id === m[0]) {
+                if (tg.count >= m[1]) {
+                  return trueCounting++;
+                } else {
+                  insufficientUnit += tg.id + " ";
+                }
               } else {
                 return trueCounting;
               }
@@ -191,6 +196,7 @@ const App = () => {
         } else {
           // 조합 불가능
           console.log("조합 불가능");
+          alert(insufficientUnit + "이(가) 부족합니다.");
           return unit;
         }
       } else {
