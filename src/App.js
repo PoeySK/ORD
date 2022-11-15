@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const commonUnits = [
   "루피",
@@ -28,22 +28,20 @@ const nonCommonUnits = [
 ];
 
 const App = () => {
+  const intervalId = useRef(null);
   const [units, setUnits] = useState([
     {
       id: "루피",
       count: 0,
     },
-
     {
       id: "조로",
       count: 0,
     },
-
     {
       id: "나미",
       count: 0,
     },
-
     {
       id: "우솝",
       count: 0,
@@ -53,22 +51,18 @@ const App = () => {
       id: "상디",
       count: 0,
     },
-
     {
       id: "쵸파",
       count: 0,
     },
-
     {
       id: "버기",
       count: 0,
     },
-
     {
       id: "총병",
       count: 0,
     },
-
     {
       id: "칼병",
       count: 0,
@@ -156,6 +150,7 @@ const App = () => {
 
   const onClickButtonMake = (e) => {
     let saveUnits = [];
+    // temp unit 객체
     let insufficientUnit = "";
     let result = false;
     let newUnits = units.map((unit) => {
@@ -187,7 +182,6 @@ const App = () => {
             });
             return trueCounting;
           });
-
           if (parseInt(mapping) === needLength) {
             result = true;
             break;
@@ -211,10 +205,11 @@ const App = () => {
         return unit;
       }
     });
-    setUnits(newUnits);
+
+    // 이전 단계 유닛 제거
     if (result) {
       for (let i = 0; i < saveUnits.length; i++) {
-        const reallocate = units.map((unit) => {
+        const reallocate = newUnits.map((unit) => {
           if (saveUnits[i][0] === unit.id) {
             return {
               ...unit,
