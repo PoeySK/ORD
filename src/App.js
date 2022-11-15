@@ -19,7 +19,7 @@ const nonCommonUnits = [
   "에이스",
   "이나즈마",
   "저격왕",
-  "쵸파 럼블볼강화",
+  "쵸파럼블볼강화",
   "타시기",
   "페로나",
   "프랑키",
@@ -86,7 +86,7 @@ const App = () => {
     {
       id: "브룩",
       count: 0,
-      need: [{ 조로: 1 }, { 상디: 1 }],
+      need: [{ 조로: 1 }, { 쵸파: 1 }],
     },
     {
       id: "블루노",
@@ -109,7 +109,7 @@ const App = () => {
       need: [{ 우솝: 2 }],
     },
     {
-      id: "쵸파럼블볼강회",
+      id: "쵸파럼블볼강화",
       count: 0,
       need: [{ 쵸파: 2 }],
     },
@@ -131,7 +131,7 @@ const App = () => {
     {
       id: "하찌",
       count: 0,
-      need: [{ 총병: 1 }, { 검병: 1 }],
+      need: [{ 총병: 1 }, { 나미: 1 }],
     },
     {
       id: "후쿠로",
@@ -155,37 +155,45 @@ const App = () => {
   };
 
   const onClickButtonMake = (e) => {
+    let saveUnits = [];
     let insufficientUnit = "";
+    let result = false;
     let newUnits = units.map((unit) => {
       if (unit.id === e.target.id) {
         console.log(unit.need);
-        let result = false;
+        let needLength = 0;
+        for (let i = 0; i < unit.need.length; i++) {
+          const len = Object.entries(unit.need[i]).map((m) => {
+            needLength += m[1];
+          });
+        }
+
         let trueCounting = 0;
         for (let i = 0; i < unit.need.length; i++) {
           const mapping = Object.entries(unit.need[i]).map((m) => {
             const find = units.map((tg) => {
               if (tg.id === m[0]) {
                 if (tg.count >= m[1]) {
-                  return trueCounting++;
+                  saveUnits.push([tg.id, m[1]]);
+                  return (trueCounting += m[1]);
                 } else {
-                  insufficientUnit += tg.id + " ";
+                  insufficientUnit += tg.id + (m[1] - tg.count) + "개 ";
+
+                  return trueCounting;
                 }
               } else {
                 return trueCounting;
               }
             });
-            console.log("find: " + find);
             return trueCounting;
           });
-          console.log("mapping: " + typeof parseInt(mapping));
-          console.log("need length: " + typeof unit.need.length);
-          if (parseInt(mapping) === unit.need.length) {
-            console.log("hi");
+
+          if (parseInt(mapping) === needLength) {
             result = true;
             break;
           }
         }
-        console.log("result 값: " + result);
+
         if (result) {
           // 조합 가능
           console.log("조합 가능");
@@ -204,6 +212,21 @@ const App = () => {
       }
     });
     setUnits(newUnits);
+    if (result) {
+      for (let i = 0; i < saveUnits.length; i++) {
+        const reallocate = units.map((unit) => {
+          if (saveUnits[i][0] === unit.id) {
+            return {
+              ...unit,
+              count: unit.count - saveUnits[i][1],
+            };
+          } else {
+            return unit;
+          }
+        });
+        setUnits(reallocate);
+      }
+    }
   };
 
   const onClickRightButton = (e) => {
@@ -217,7 +240,6 @@ const App = () => {
         return unit;
       }
     });
-    console.log(newUnits);
     setUnits(newUnits);
     e.preventDefault();
   };
