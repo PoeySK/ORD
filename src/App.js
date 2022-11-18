@@ -249,7 +249,7 @@ const App = () => {
             <th>원랜디 조합법</th>
           </thead>
           <tbody>
-            <th>안흔함</th>
+            <th>흔함</th>
             {commonUnits.map((name, index) => {
               return (
                 <tr>
@@ -275,7 +275,7 @@ const App = () => {
             <th>원랜디 조합법</th>
           </thead>
           <tbody>
-            <th>흔함</th>
+            <th>안흔함</th>
             {nonCommonUnits.map((name, index) => {
               return (
                 <tr>
