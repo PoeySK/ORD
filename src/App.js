@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { ReactDOM, useState } from "react";
+import { useSelector } from "react-redux";
+import Units from "./redux/store";
 
 const commonUnits = [
   "루피",
@@ -28,7 +30,9 @@ const nonCommonUnits = [
 ];
 
 const App = () => {
-  const intervalId = useRef(null);
+  // const u = useSelector((state) => state);
+  // console.log(u);
+  // console.log("Import 값 : ", Units);
   const [units, setUnits] = useState([
     {
       id: "루피",
@@ -133,6 +137,8 @@ const App = () => {
       need: [{ 칼병: 2 }],
     },
   ]);
+
+  const unitPlus = () => {};
 
   const onClickButtonPlus = (e) => {
     let newUnits = units.map((unit) => {
