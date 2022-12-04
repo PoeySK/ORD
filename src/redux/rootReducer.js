@@ -1,3 +1,7 @@
+export const PLUS = "PLUS";
+export const MAKE = "MAKE";
+export const RIGHT = "RIGHT";
+
 const initialState = {
   루피: {
     count: 0,
@@ -89,8 +93,38 @@ const initialState = {
   },
 };
 
+export const plusButton = () => ({
+  type: PLUS,
+});
+
+export const makeButton = () => ({
+  type: MAKE,
+});
+
+export const rightButton = () => ({
+  type: RIGHT,
+});
+
 const rootReducer = (state = initialState, action) => {
-  return state;
+  switch (action.type) {
+    case PLUS:
+      console.log(action);
+      return {
+        ...state,
+        count: action.count + 1,
+      };
+    case MAKE:
+      return {
+        ...state,
+      };
+    case RIGHT:
+      return {
+        ...state,
+        count: action.count - 1,
+      };
+    default:
+      return state;
+  }
 };
 
 export default rootReducer;
